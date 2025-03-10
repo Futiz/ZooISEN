@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">ZooISEN</string>
+    <string name="username">Nom d utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="send">Envoyer</string>
+    <string name="Create_account">Creer un compte</string>
+    <string name="account_created">Compte créé avec succès !</string>
+    <string name="unknown_error">Erreur inconnue</string>
+    <string name="sign_up">S inscrire</string>
+    <string name="arlready_an_account">Déjà un compte ? Se connecter</string>
+    <string name="Email">Email</string>
+    <string name="confirm_password">Confirmer le mot de passe</string>
+    <string name="unvalid_email">Email invalide</string>
+    <string name="short_password">Le mot de passe doit contenir au moins 6 caractères</string>
+    <string name="unmatching_password">Les mots de passe ne correspondent pas</string>
 </resources>
