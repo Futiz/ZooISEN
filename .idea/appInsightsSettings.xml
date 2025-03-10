@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="fr.isen.sannicolas.zooisen" />
+                  <option name="mobileSdkAppId" value="1:529346250707:android:e4bbcdc2164364ba311126" />
+                  <option name="projectId" value="zooisen" />
+                  <option name="projectNumber" value="529346250707" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

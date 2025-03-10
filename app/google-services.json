@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "529346250707",
+    "firebase_url": "https://zooisen-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "zooisen",
     "storage_bucket": "zooisen.firebasestorage.app"
   },
