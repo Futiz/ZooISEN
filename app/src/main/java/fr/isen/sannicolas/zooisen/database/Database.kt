@@ -12,7 +12,7 @@ data class Animal(
 
 data class Enclosure(
     val id_biomes: String = "",
-    val meal: String = "",
+    val id: String = "",
     var animals: List<Animal> = emptyList() // 🔥 Remplacé Map par List
 )
 
@@ -21,6 +21,8 @@ data class Biome(
     val name: String = "",
     var enclosures: List<Enclosure> = emptyList() // 🔥 Remplacé Map par List
 )
+
+data class Comment(val author: String = "", val text: String = "")
 
 object Database {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
@@ -40,6 +42,7 @@ object Database {
                     val enclosuresSnapshot = biomeSnapshot.child("enclosures")
 
                     for (enclosureSnapshot in enclosuresSnapshot.children) {
+                        val id = enclosureSnapshot.key ?: ""
                         val id_biomes = enclosureSnapshot.child("id_biomes").getValue(String::class.java) ?: ""
                         val meal = enclosureSnapshot.child("meal").getValue(String::class.java) ?: ""
 
@@ -54,7 +57,7 @@ object Database {
                             animalsList.add(Animal(id_animal, name, id_enclos))
                         }
 
-                        enclosuresList.add(Enclosure(id_biomes, meal, animalsList))
+                        enclosuresList.add(Enclosure(id_biomes, id, animalsList))
                     }
 
                     biomeList.add(Biome(color, name, enclosuresList))
@@ -68,4 +71,60 @@ object Database {
             }
         })
     }
+    fun fetchComments(enclosureId: String, onSuccess: (List<Comment>) -> Unit, onFailure: (Exception) -> Unit) {
+        val commentsRef = biomesRef.child("enclosures").child(enclosureId).child("comments")
+
+        commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val commentsList = mutableListOf<Comment>()
+                for (commentSnapshot in snapshot.children) {
+                    val comment = commentSnapshot.getValue(Comment::class.java)
+                    comment?.let { commentsList.add(it) }
+                }
+                onSuccess(commentsList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onFailure(error.toException())
+            }
+        })
+    }
+
+    // 🔹 Ajouter un commentaire à un enclos
+    fun addComment(enclosureId: String, author: String, text: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val commentsRef = biomesRef.child("enclosures").child(enclosureId).child("comments")
+        val newCommentRef = commentsRef.push()
+        val comment = Comment(author, text)
+
+        newCommentRef.setValue(comment)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+    fun addCommentsSectionToEnclosures() {
+        val database = FirebaseDatabase.getInstance()
+        val biomesRef = database.getReference("biomes")
+
+        biomesRef.get().addOnSuccessListener { snapshot ->
+            snapshot.children.forEach { biomeSnapshot ->
+                val enclosuresRef = biomeSnapshot.child("enclosures").ref
+
+                biomeSnapshot.child("enclosures").children.forEach { enclosureSnapshot ->
+                    val enclosureId = enclosureSnapshot.key
+                    if (enclosureId != null) {
+                        // Ajoute la section 'comments' si elle n'existe pas
+                        enclosuresRef.child(enclosureId).child("comments").get()
+                            .addOnSuccessListener { commentSnapshot ->
+                                if (!commentSnapshot.exists()) {
+                                    enclosuresRef.child(enclosureId).child("comments").setValue(emptyMap<String, String>())
+                                }
+                            }
+                    }
+                }
+            }
+        }.addOnFailureListener { exception ->
+            Log.e("Firebase", "Erreur lors de l'ajout des comments", exception)
+        }
+    }
+
+
 }
