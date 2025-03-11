@@ -12,16 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
 import androidx.compose.foundation.background
 import fr.isen.sannicolas.zooisen.database.Biome
 import androidx.compose.ui.res.painterResource
 import fr.isen.sannicolas.zooisen.R
 import fr.isen.sannicolas.zooisen.database.Database
-import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun BiomeScreen(navController: NavHostController) {
@@ -35,30 +32,29 @@ fun BiomeScreen(navController: NavHostController) {
         )
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFAA603D)) // Ajout de la couleur de fond
-            .padding(16.dp)
+            .background(Color(0xFFAA603D))
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Liste des Biomes",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.White // Pour contraster avec le fond
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Liste des Biomes",
+            style = MaterialTheme.typography.headlineMedium,
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(8.dp))
 
-            if (errorMessage != null) {
-                Text(
-                    text = "Erreur : $errorMessage",
-                    color = MaterialTheme.colorScheme.error
-                )
-            } else {
-                LazyColumn {
-                    items(biomes) { biome ->
-                        BiomeItem(biome, navController)
-                    }
+        if (errorMessage != null) {
+            Text(
+                text = "Erreur : $errorMessage",
+                color = MaterialTheme.colorScheme.error
+            )
+        } else {
+            LazyColumn {
+                items(biomes) { biome ->
+                    BiomeItem(biome, navController)
                 }
             }
         }
@@ -107,4 +103,3 @@ fun getBiomeImage(biomeName: String): Int {
         else -> android.R.color.transparent
     }
 }
-

@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import fr.isen.sannicolas.zooisen.screens.BiomeScreen
 import fr.isen.sannicolas.zooisen.screens.EnclosureScreen
 import fr.isen.sannicolas.zooisen.ui.theme.ZooISENTheme
+import fr.isen.sannicolas.zooisen.screens.EnclosureCommentScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +29,12 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("enclosures/{biomeName}") { backStackEntry ->
                         val biomeName = backStackEntry.arguments?.getString("biomeName") ?: ""
-                        EnclosureScreen(navController, biomeName)
+                        EnclosureScreen(navController, biomeName) // ✅ Affiche les enclos d'un biome
+                    }
+                    composable("enclosure_comments/{biomeName}/{enclosure.id}") { backStackEntry ->
+                        val biomeName = backStackEntry.arguments?.getString("biomeName") ?: ""
+                        val enclosureId = backStackEntry.arguments?.getString("enclosureId") ?: ""
+                        EnclosureCommentScreen(navController, enclosureId) //
                     }
                 }
             }

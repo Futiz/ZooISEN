@@ -1,9 +1,7 @@
 package fr.isen.sannicolas.zooisen.database
 
-import android.util.Log
 import com.google.firebase.database.*
 
-// Modèle de données pour correspondre à la base Firebase
 data class Animal(
     val id_animal: String = "",
     val name: String = "",
@@ -13,23 +11,29 @@ data class Animal(
 data class Enclosure(
     val id_biomes: String = "",
     val id: String = "",
-    var animals: List<Animal> = emptyList() // 🔥 Remplacé Map par List
+    var animals: List<Animal> = emptyList()
 )
 
 data class Biome(
     val color: String = "",
     val name: String = "",
-    var enclosures: List<Enclosure> = emptyList() // 🔥 Remplacé Map par List
+    var enclosures: List<Enclosure> = emptyList()
 )
 
-data class Comment(val author: String = "", val text: String = "")
+data class Comment(
+    val id: String = "", // ✅ ID DU COMMENTAIRE
+    val author: String = "",
+    val text: String = "",
+    val enclosureId: String = "" // ✅ ID DE L'ENCLOS
+)
 
 object Database {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    private val biomesRef: DatabaseReference = database.getReference("biomes")
+    private val enclosuresRef: DatabaseReference = database.getReference("enclosures")
 
-    // 🔹 Lire les biomes depuis Firebase
     fun fetchBiomes(onSuccess: (List<Biome>) -> Unit, onFailure: (Exception) -> Unit) {
+        val biomesRef = database.getReference("biomes")
+
         biomesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val biomeList = mutableListOf<Biome>()
@@ -44,7 +48,6 @@ object Database {
                     for (enclosureSnapshot in enclosuresSnapshot.children) {
                         val id = enclosureSnapshot.key ?: ""
                         val id_biomes = enclosureSnapshot.child("id_biomes").getValue(String::class.java) ?: ""
-                        val meal = enclosureSnapshot.child("meal").getValue(String::class.java) ?: ""
 
                         val animalsList = mutableListOf<Animal>()
                         val animalsSnapshot = enclosureSnapshot.child("animals")
@@ -71,15 +74,23 @@ object Database {
             }
         })
     }
-    fun fetchComments(enclosureId: String, onSuccess: (List<Comment>) -> Unit, onFailure: (Exception) -> Unit) {
-        val commentsRef = biomesRef.child("enclosures").child(enclosureId).child("comments")
+
+    fun fetchComments(
+        enclosureId: String,
+        onSuccess: (List<Comment>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val commentsRef = enclosuresRef.child(enclosureId).child("comments")
 
         commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val commentsList = mutableListOf<Comment>()
                 for (commentSnapshot in snapshot.children) {
+                    val commentId = commentSnapshot.key ?: ""
                     val comment = commentSnapshot.getValue(Comment::class.java)
-                    comment?.let { commentsList.add(it) }
+                    comment?.let {
+                        commentsList.add(it.copy(id = commentId, enclosureId = enclosureId)) // ✅ On stocke bien l'ID de l'enclos
+                    }
                 }
                 onSuccess(commentsList)
             }
@@ -90,41 +101,31 @@ object Database {
         })
     }
 
-    // 🔹 Ajouter un commentaire à un enclos
-    fun addComment(enclosureId: String, author: String, text: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val commentsRef = biomesRef.child("enclosures").child(enclosureId).child("comments")
+    fun addComment(
+        enclosureId: String,
+        author: String,
+        text: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val commentsRef = enclosuresRef.child(enclosureId).child("comments")
         val newCommentRef = commentsRef.push()
-        val comment = Comment(author, text)
+
+        val comment = Comment(
+            id = newCommentRef.key ?: "", // ✅ ID DU COMMENTAIRE
+            author = author,
+            text = text,
+            enclosureId = enclosureId // ✅ ON STOCKE BIEN L'ID DE L'ENCLOS !
+        )
 
         newCommentRef.setValue(comment)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onFailure(it) }
-    }
-    fun addCommentsSectionToEnclosures() {
-        val database = FirebaseDatabase.getInstance()
-        val biomesRef = database.getReference("biomes")
-
-        biomesRef.get().addOnSuccessListener { snapshot ->
-            snapshot.children.forEach { biomeSnapshot ->
-                val enclosuresRef = biomeSnapshot.child("enclosures").ref
-
-                biomeSnapshot.child("enclosures").children.forEach { enclosureSnapshot ->
-                    val enclosureId = enclosureSnapshot.key
-                    if (enclosureId != null) {
-                        // Ajoute la section 'comments' si elle n'existe pas
-                        enclosuresRef.child(enclosureId).child("comments").get()
-                            .addOnSuccessListener { commentSnapshot ->
-                                if (!commentSnapshot.exists()) {
-                                    enclosuresRef.child(enclosureId).child("comments").setValue(emptyMap<String, String>())
-                                }
-                            }
-                    }
-                }
+            .addOnSuccessListener {
+                println("✅ Commentaire ajouté SOUS l'enclos : $enclosureId")
+                onSuccess()
             }
-        }.addOnFailureListener { exception ->
-            Log.e("Firebase", "Erreur lors de l'ajout des comments", exception)
-        }
+            .addOnFailureListener {
+                println("❌ Erreur ajout commentaire : ${it.message}")
+                onFailure(it)
+            }
     }
-
-
 }
