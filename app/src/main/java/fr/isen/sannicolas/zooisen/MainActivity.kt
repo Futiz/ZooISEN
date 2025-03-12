@@ -27,14 +27,16 @@ class MainActivity : ComponentActivity() {
                     composable("biomes") {
                         BiomeScreen(navController)
                     }
-                    composable("enclosures/{biomeName}") { backStackEntry ->
-                        val biomeName = backStackEntry.arguments?.getString("biomeName") ?: ""
-                        EnclosureScreen(navController, biomeName) // ✅ Affiche les enclos d'un biome
+
+                    composable("enclosures/{biomeId}") { backStackEntry ->
+                        val biomeId = backStackEntry.arguments?.getString("biomeId") ?: ""
+                        EnclosureScreen(navController, biomeId)
                     }
-                    composable("enclosure_comments/{biomeName}/{enclosure.id}") { backStackEntry ->
-                        val biomeName = backStackEntry.arguments?.getString("biomeName") ?: ""
+
+                    composable("enclosure_comments/{biomeId}/{enclosureId}") { backStackEntry ->
+                        val biomeId = backStackEntry.arguments?.getString("biomeId") ?: ""
                         val enclosureId = backStackEntry.arguments?.getString("enclosureId") ?: ""
-                        EnclosureCommentScreen(navController, enclosureId) //
+                        EnclosureCommentScreen(navController, biomeId, enclosureId)
                     }
                 }
             }

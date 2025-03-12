@@ -18,13 +18,13 @@ import fr.isen.sannicolas.zooisen.database.Database
 import fr.isen.sannicolas.zooisen.database.Enclosure
 
 @Composable
-fun EnclosureScreen(navController: NavHostController, biomeName: String) {
+fun EnclosureScreen(navController: NavHostController, biomeId: String) {
     var selectedBiome by remember { mutableStateOf<Biome?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         Database.fetchBiomes(
-            onSuccess = { biomes -> selectedBiome = biomes.find { it.name == biomeName } },
+            onSuccess = { biomes -> selectedBiome = biomes.find { it.name == biomeId } },
             onFailure = { errorMessage = it.message }
         )
     }
@@ -32,12 +32,12 @@ fun EnclosureScreen(navController: NavHostController, biomeName: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFAA603D)) // Fond de la page
+            .background(Color(0xFFAA603D))
             .padding(16.dp)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Enclos de $biomeName",
+                text = "Enclos de $biomeId",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -50,7 +50,7 @@ fun EnclosureScreen(navController: NavHostController, biomeName: String) {
                 LazyColumn {
                     selectedBiome?.enclosures?.let { enclosures ->
                         items(enclosures) { enclosure ->
-                            EnclosureCard(enclosure, navController) // ✅ Utilisation correcte d'EnclosureCard
+                            EnclosureCard(enclosure, biomeId, navController)
                         }
                     }
                 }
@@ -68,20 +68,14 @@ fun EnclosureScreen(navController: NavHostController, biomeName: String) {
 }
 
 @Composable
-fun EnclosureCard(enclosure: Enclosure, navController: NavHostController) {
-    val safeColor = try {
-        Color(android.graphics.Color.parseColor("#FFD38B")) // 🔹 Couleur HEX propre
-    } catch (e: IllegalArgumentException) {
-        Color.Gray // 🔹 Sécurité en cas d'erreur
-    }
-
+fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = safeColor) // ✅ Sécurisé
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFD38B))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -93,38 +87,15 @@ fun EnclosureCard(enclosure: Enclosure, navController: NavHostController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             // 🔹 Liste des animaux gardés dans l'enclos
-            Text(
-                text = "Animaux :",
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-
-            if (enclosure.animals.isNotEmpty()) {
-                Column {
-                    enclosure.animals.forEach { animal ->
-                        Text(
-                            text = "• ${animal.name}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Black
-                        )
-                    }
-                }
-            } else {
-                Text(
-                    text = "Aucun animal",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
-                )
+            Text(text = "Animaux :", fontWeight = FontWeight.Bold)
+            enclosure.animals.forEach { animal ->
+                Text(text = "• ${animal.name}")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Bouton pour aller aux commentaires de l'enclos
             Button(
-                onClick = {
-                    navController.navigate("enclosure_comments/{biomeName}/{enclosure.id}") // ✅ Navigation vers les commentaires
-                },
+                onClick = { navController.navigate("enclosure_comments/$biomeId/${enclosure.id}") },
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Text("Commenter")
@@ -132,4 +103,3 @@ fun EnclosureCard(enclosure: Enclosure, navController: NavHostController) {
         }
     }
 }
-

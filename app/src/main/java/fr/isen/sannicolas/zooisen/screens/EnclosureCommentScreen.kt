@@ -18,14 +18,14 @@ import fr.isen.sannicolas.zooisen.database.Comment
 import fr.isen.sannicolas.zooisen.database.Database
 
 @Composable
-fun EnclosureCommentScreen(navController: NavHostController, enclosureId: String) {
+fun EnclosureCommentScreen(navController: NavHostController, biomeId: String, enclosureId: String) {
     var comments by remember { mutableStateOf<List<Comment>>(emptyList()) }
     var newComment by remember { mutableStateOf("") }
 
-    // 🔹 Charger les commentaires de l'enclos spécifique
     LaunchedEffect(enclosureId) {
         Database.fetchComments(
-            enclosureId = enclosureId,  // ✅ On récupère bien les commentaires pour l'enclos spécifié
+            biomeId = biomeId,
+            enclosureId = enclosureId,
             onSuccess = { comments = it },
             onFailure = { println("❌ Erreur chargement commentaires: ${it.message}") }
         )
@@ -53,18 +53,14 @@ fun EnclosureCommentScreen(navController: NavHostController, enclosureId: String
             Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
+                modifier = Modifier.weight(1f).fillMaxWidth()
             ) {
                 items(comments) { comment ->
                     Card(
                         shape = RoundedCornerShape(12.dp),
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp)
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
@@ -79,8 +75,6 @@ fun EnclosureCommentScreen(navController: NavHostController, enclosureId: String
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
             OutlinedTextField(
                 value = newComment,
                 onValueChange = { newComment = it },
@@ -89,37 +83,12 @@ fun EnclosureCommentScreen(navController: NavHostController, enclosureId: String
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // 🔹 Bouton Retour
-                Button(
-                    onClick = { navController.popBackStack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF005BBB))
-                ) {
-                    Text("Retour", color = Color.White)
-                }
-
-                // 🔹 Bouton Envoyer un commentaire
-                Button(
-                    onClick = {
-                        if (newComment.isNotBlank()) {
-                            Database.addComment(
-                                enclosureId = enclosureId,  // ✅ Enregistrement au bon endroit
-                                author = "Utilisateur",
-                                text = newComment,
-                                onSuccess = { newComment = "" },
-                                onFailure = { println("❌ Erreur lors de l'ajout du commentaire: ${it.message}") }
-                            )
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF34C759))
-                ) {
-                    Text(text = "Envoyer", color = Color.White)
-                }
+                Button(onClick = { navController.popBackStack() }) { Text("Retour") }
+                Button(onClick = { if (newComment.isNotBlank()) Database.addComment(biomeId, enclosureId, "Utilisateur", newComment, { newComment = "" }, {}) }) { Text("Envoyer") }
             }
         }
     }
