@@ -56,6 +56,30 @@ fun BiomeScreen(navController: NavHostController) {
                 items(biomes) { biome ->
                     BiomeItem(biome, navController)
                 }
+
+                // ✅ Ajout de la carte "Park Services"
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { navController.navigate("park_services") },
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF4CAF50)) // ✅ Couleur verte
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Park Services",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -63,6 +87,16 @@ fun BiomeScreen(navController: NavHostController) {
 
 @Composable
 fun BiomeItem(biome: Biome, navController: NavHostController) {
+    val safeColor = try {
+        if (biome.color.isNotBlank()) { // 🔹 Vérifie que la couleur n'est pas vide
+            Color(android.graphics.Color.parseColor(biome.color))
+        } else {
+            Color.Gray // ✅ Utilisation d'une couleur de secours si vide
+        }
+    } catch (e: IllegalArgumentException) {
+        Color.Gray // ✅ Si la couleur est invalide, on met du gris
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,7 +104,7 @@ fun BiomeItem(biome: Biome, navController: NavHostController) {
             .clickable { navController.navigate("enclosures/${biome.name}") },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biome.color)))
+        colors = CardDefaults.cardColors(containerColor = safeColor) // ✅ Utilisation du safeColor sécurisé
     ) {
         Column {
             Image(
@@ -91,6 +125,7 @@ fun BiomeItem(biome: Biome, navController: NavHostController) {
     }
 }
 
+
 // Fonction pour récupérer une image selon le biome
 fun getBiomeImage(biomeName: String): Int {
     return when (biomeName) {
@@ -100,6 +135,6 @@ fun getBiomeImage(biomeName: String): Int {
         "Le Plateau" -> R.drawable.lion
         "Les Clairières" -> R.drawable.bison
         "Le Bois des pins" -> R.drawable.loup
-        else -> android.R.color.transparent
+        else -> R.drawable.default_image
     }
 }
