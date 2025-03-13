@@ -16,6 +16,11 @@ import androidx.navigation.NavHostController
 import fr.isen.sannicolas.zooisen.database.Biome
 import fr.isen.sannicolas.zooisen.database.Database
 import fr.isen.sannicolas.zooisen.database.Enclosure
+import fr.isen.sannicolas.zooisen.R
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.clickable
+import com.google.firebase.database.FirebaseDatabase
+
 
 @Composable
 fun EnclosureScreen(navController: NavHostController, biomeId: String) {
@@ -69,6 +74,26 @@ fun EnclosureScreen(navController: NavHostController, biomeId: String) {
 
 @Composable
 fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostController) {
+    val userId = "User123" // TODO: Récupérer l'ID réel de l'utilisateur connecté
+    var rating by remember { mutableStateOf(0) }
+
+    // 🔥 Récupération de la note stockée
+    LaunchedEffect(enclosure.id) {
+        val ratingRef = FirebaseDatabase.getInstance()
+            .getReference("biomes")
+            .child(biomeId)
+            .child("enclosures")
+            .child(enclosure.id)
+            .child("ratings")
+            .child(userId)
+
+        ratingRef.get().addOnSuccessListener { snapshot ->
+            snapshot.getValue(Int::class.java)?.let { savedRating ->
+                rating = savedRating
+            }
+        }
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -94,12 +119,46 @@ fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostC
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // 🔥 Barre de notation (avec sauvegarde)
+            Text(text = "Notez cet enclos :", fontWeight = FontWeight.Bold)
+            RatingBar(currentRating = rating) { selectedRating ->
+                rating = selectedRating
+                Database.addRating(
+                    biomeId, enclosure.id, userId, selectedRating,
+                    onSuccess = { println("✅ Note mise à jour") },
+                    onFailure = { println("❌ Échec de l'enregistrement") }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Button(
                 onClick = { navController.navigate("enclosure_comments/$biomeId/${enclosure.id}") },
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Text("Commenter")
             }
+        }
+    }
+}
+
+
+
+@Composable
+fun RatingBar(
+    currentRating: Int,
+    onRatingSelected: (Int) -> Unit
+) {
+    Row {
+        (1..5).forEach { star ->
+            Icon(
+                painter = painterResource(if (star <= currentRating) R.drawable.star_filled else R.drawable.star_empty),
+                contentDescription = "Rating star",
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable { onRatingSelected(star) }
+            )
         }
     }
 }

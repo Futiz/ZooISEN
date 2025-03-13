@@ -26,6 +26,12 @@ data class Comment(
     val text: String = ""
 )
 
+data class Rating(
+    val userId: String = "",
+    val rating: Int = 0
+)
+
+
 object Database {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val biomesRef: DatabaseReference = database.getReference("biomes")
@@ -117,4 +123,41 @@ object Database {
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
     }
+
+    fun addRating(biomeId: String, enclosureId: String, userId: String, rating: Int, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val ratingsRef = FirebaseDatabase.getInstance().getReference("biomes")
+            .child(biomeId)
+            .child("enclosures")
+            .child(enclosureId)
+            .child("ratings")
+            .child(userId)
+
+        ratingsRef.setValue(rating)
+            .addOnSuccessListener {
+                updateAverageRating(biomeId, enclosureId)
+                onSuccess()
+            }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    fun updateAverageRating(biomeId: String, enclosureId: String) {
+        val ratingsRef = FirebaseDatabase.getInstance().getReference("biomes")
+            .child(biomeId)
+            .child("enclosures")
+            .child(enclosureId)
+            .child("ratings")
+
+        ratingsRef.get().addOnSuccessListener { snapshot ->
+            val ratings = snapshot.children.mapNotNull { it.getValue(Int::class.java) }
+            val averageRating = if (ratings.isNotEmpty()) ratings.average() else 0.0
+
+            FirebaseDatabase.getInstance().getReference("biomes")
+                .child(biomeId)
+                .child("enclosures")
+                .child(enclosureId)
+                .child("averageRating")
+                .setValue(averageRating)
+        }
+    }
+
 }
