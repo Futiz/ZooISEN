@@ -1,34 +1,25 @@
 package fr.isen.sannicolas.zooisen
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-<<<<<<< HEAD
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import fr.isen.sannicolas.zooisen.screens.AuthScreen
 import fr.isen.sannicolas.zooisen.screens.BiomeScreen
+import fr.isen.sannicolas.zooisen.screens.CreateAccountScreen
 import fr.isen.sannicolas.zooisen.screens.EnclosureCommentScreen
 import fr.isen.sannicolas.zooisen.screens.EnclosureScreen
 import fr.isen.sannicolas.zooisen.screens.ParkMapScreen
 import fr.isen.sannicolas.zooisen.screens.ParkServiceScreen
+import fr.isen.sannicolas.zooisen.screens.RegisterScreen
 import fr.isen.sannicolas.zooisen.ui.theme.ZooISENTheme
-=======
-import androidx.compose.ui.tooling.preview.Preview
-import fr.isen.sannicolas.zooisen.database.Biome
-import fr.isen.sannicolas.zooisen.database.Database
-import fr.isen.sannicolas.zooisen.ui.theme.ZooISENTheme
-import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import fr.isen.sannicolas.zooisen.screens.*
 
->>>>>>> tom
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
