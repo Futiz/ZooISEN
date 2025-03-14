@@ -8,14 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import fr.isen.sannicolas.zooisen.screens.AuthScreen
-import fr.isen.sannicolas.zooisen.screens.BiomeScreen
-import fr.isen.sannicolas.zooisen.screens.CreateAccountScreen
-import fr.isen.sannicolas.zooisen.screens.EnclosureCommentScreen
-import fr.isen.sannicolas.zooisen.screens.EnclosureScreen
-import fr.isen.sannicolas.zooisen.screens.ParkMapScreen
-import fr.isen.sannicolas.zooisen.screens.ParkServiceScreen
-import fr.isen.sannicolas.zooisen.screens.RegisterScreen
+import fr.isen.sannicolas.zooisen.screens.*
 import fr.isen.sannicolas.zooisen.ui.theme.ZooISENTheme
 
 
@@ -62,6 +55,10 @@ class MainActivity : ComponentActivity() {
                     composable("park_map") {
                         ParkMapScreen(navController)
                     }
+                    composable("wazoo") {
+                        WazooScreen(navController)
+                    }
+
                 }
             }
         }

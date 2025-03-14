@@ -78,7 +78,7 @@ fun BiomeScreen(navController: NavHostController) {
                                 contentScale = ContentScale.Crop
                             )
                             Text(
-                                text = "Park Services & Map",
+                                text = "Services du parc & Map",
                                 style = MaterialTheme.typography.titleLarge,
                                 modifier = Modifier.padding(16.dp),
                                 color = Color.White
@@ -86,6 +86,35 @@ fun BiomeScreen(navController: NavHostController) {
                         }
                     }
                 }
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { navController.navigate("wazoo") },
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E88E5))
+                    ) {
+                        Column {
+                            Image(
+                                painter = painterResource(id = R.drawable.wazoo),
+                                contentDescription = "Wazoo - Navigation",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                            Text(
+                                text = "Wazoo - Navigation",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(16.dp),
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+
 
             }
         }

@@ -50,15 +50,19 @@ object Database {
 
                     for (enclosureSnapshot in enclosuresSnapshot.children) {
                         val id = enclosureSnapshot.key ?: ""
-                        val id_biomes = enclosureSnapshot.child("id_biomes").getValue(String::class.java) ?: ""
+                        val id_biomes =
+                            enclosureSnapshot.child("id_biomes").getValue(String::class.java) ?: ""
 
                         val animalsList = mutableListOf<Animal>()
                         val animalsSnapshot = enclosureSnapshot.child("animals")
 
                         for (animalSnapshot in animalsSnapshot.children) {
-                            val id_animal = animalSnapshot.child("id_animal").getValue(String::class.java) ?: ""
-                            val name = animalSnapshot.child("name").getValue(String::class.java) ?: ""
-                            val id_enclos = animalSnapshot.child("id_enclos").getValue(String::class.java) ?: ""
+                            val id_animal =
+                                animalSnapshot.child("id_animal").getValue(String::class.java) ?: ""
+                            val name =
+                                animalSnapshot.child("name").getValue(String::class.java) ?: ""
+                            val id_enclos =
+                                animalSnapshot.child("id_enclos").getValue(String::class.java) ?: ""
 
                             animalsList.add(Animal(id_animal, name, id_enclos))
                         }
@@ -84,7 +88,8 @@ object Database {
         onSuccess: (List<Comment>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val commentsRef = biomesRef.child(biomeId).child("enclosures").child(enclosureId).child("comments")
+        val commentsRef =
+            biomesRef.child(biomeId).child("enclosures").child(enclosureId).child("comments")
 
         commentsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -110,7 +115,8 @@ object Database {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val commentsRef = biomesRef.child(biomeId).child("enclosures").child(enclosureId).child("comments")
+        val commentsRef =
+            biomesRef.child(biomeId).child("enclosures").child(enclosureId).child("comments")
         val newCommentRef = commentsRef.push()
 
         val comment = Comment(
@@ -124,7 +130,14 @@ object Database {
             .addOnFailureListener { onFailure(it) }
     }
 
-    fun addRating(biomeId: String, enclosureId: String, userId: String, rating: Int, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun addRating(
+        biomeId: String,
+        enclosureId: String,
+        userId: String,
+        rating: Int,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         val ratingsRef = FirebaseDatabase.getInstance().getReference("biomes")
             .child(biomeId)
             .child("enclosures")
@@ -159,5 +172,4 @@ object Database {
                 .setValue(averageRating)
         }
     }
-
 }

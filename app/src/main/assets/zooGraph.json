@@ -1,0 +1,567 @@
+{
+    "Enclos 10": {
+        "Boutique": 137.36
+    },
+    "Enclos 1": {
+        "Enclos 2": 55.46,
+        "Enclos 3": 113.22,
+        "Point de vue (Belvédère)": 165.3,
+        "Poste de secours": 199.49,
+        "Gare des cascades": 100.77
+    },
+    "Enclos 2": {
+        "Enclos 1": 55.46,
+        "Enclos 3": 65.25,
+        "Point de vue (Belvédère)": 116.85,
+        "Gare des cascades": 102.11
+    },
+    "Enclos 3": {
+        "Enclos 1": 113.22,
+        "Enclos 2": 65.25,
+        "Point de vue (Belvédère)": 119.15,
+        "Gare des cascades": 96.75
+    },
+    "Enclos 4": {
+        "Enclos 5": 106.93,
+        "Enclos 6": 102.14,
+        "Enclos 25": 193.75,
+        "Enclos 24": 132.97
+    },
+    "Enclos 5": {
+        "Enclos 4": 106.93,
+        "Enclos 6": 83.24,
+        "Enclos 7": 150.76,
+        "Café nomade": 130.36,
+        "Sortie de secours (Vallon des Cascades)": 157.2
+    },
+    "Enclos 6": {
+        "Enclos 4": 102.14,
+        "Enclos 5": 83.24,
+        "Enclos 7": 105.7,
+        "Enclos 8": 177.18,
+        "Point d'eau (Vallon des Cascades)": 198.96,
+        "Café nomade": 125.43,
+        "Sortie de secours (Vallon des Cascades)": 195.56,
+        "Enclos 24": 151.42
+    },
+    "Enclos 7": {
+        "Enclos 5": 150.76,
+        "Enclos 6": 105.7,
+        "Enclos 8": 86.93,
+        "Point d'eau (Vallon des Cascades)": 95.67,
+        "Café nomade": 64.62,
+        "Sortie de secours (Vallon des Cascades)": 158.83
+    },
+    "Enclos 8": {
+        "Enclos 6": 177.18,
+        "Enclos 7": 86.93,
+        "Enclos 9": 133.78,
+        "Point d'eau (Vallon des Cascades)": 97.33,
+        "Café nomade": 140.19
+    },
+    "Enclos 9": {
+        "Enclos 8": 133.78,
+        "Enclos 29": 127.35,
+        "Enclos 26": 167.59,
+        "Enclos 46": 187.96,
+        "Point d'eau (Clairières)": 189.78
+    },
+    "Point d'eau (Vallon des Cascades)": {
+        "Enclos 6": 198.96,
+        "Enclos 7": 95.67,
+        "Enclos 8": 97.33,
+        "Café nomade": 96.05,
+        "Sortie de secours (Vallon des Cascades)": 153.38
+    },
+    "Café nomade": {
+        "Enclos 5": 130.36,
+        "Enclos 6": 125.43,
+        "Enclos 7": 64.62,
+        "Enclos 8": 140.19,
+        "Point d'eau (Vallon des Cascades)": 96.05,
+        "Sortie de secours (Vallon des Cascades)": 94.24
+    },
+    "Sortie de secours (Vallon des Cascades)": {
+        "Enclos 5": 157.2,
+        "Enclos 6": 195.56,
+        "Enclos 7": 158.83,
+        "Point d'eau (Vallon des Cascades)": 153.38,
+        "Café nomade": 94.24
+    },
+    "Enclos 32": {
+        "Enclos 33": 92.44,
+        "Enclos 46": 109.18,
+        "Enclos 47": 124.17,
+        "Point d'eau (Clairières)": 162.26,
+        "Toilettes (Clairières)": 187.72
+    },
+    "Enclos 33": {
+        "Enclos 32": 92.44,
+        "Enclos 34": 194.43,
+        "Enclos 46": 197.65,
+        "Enclos 47": 186.6
+    },
+    "Enclos 34": {
+        "Enclos 33": 194.43,
+        "Enclos 49": 101.27,
+        "Enclos 48": 160.85,
+        "Toilettes (Clairières)": 189.83
+    },
+    "Enclos 35": {
+        "Enclos 36": 166.34,
+        "Enclos 51": 178.47,
+        "Point de rassemblement (Clairières)": 188.53
+    },
+    "Enclos 36": {
+        "Enclos 35": 166.34,
+        "Enclos 51": 172.82
+    },
+    "Sortie de secours (Bois des Pins)": {
+        "Enclos 51": 150.4
+    },
+    "Enclos 11": {
+        "Enclos 12": 111.32,
+        "Enclos 13": 79.88,
+        "Enclos 14": 158.38,
+        "Point de vue (Belvédère)": 188.73,
+        "Point d'eau (Plateau)": 197.61
+    },
+    "Enclos 12": {
+        "Enclos 11": 111.32,
+        "Enclos 13": 45.69,
+        "Enclos 14": 108.26,
+        "Enclos 21": 180.57,
+        "Enclos 20": 158.52,
+        "Toilettes (Plateau)": 118.0,
+        "Point d'eau (Plateau)": 87.14,
+        "Lodge": 150.7
+    },
+    "Enclos 13": {
+        "Enclos 11": 79.88,
+        "Enclos 12": 45.69,
+        "Enclos 14": 90.24,
+        "Enclos 20": 195.87,
+        "Toilettes (Plateau)": 161.01,
+        "Point d'eau (Plateau)": 129.65,
+        "Lodge": 174.15
+    },
+    "Enclos 14": {
+        "Enclos 11": 158.38,
+        "Enclos 12": 108.26,
+        "Enclos 13": 90.24,
+        "Enclos 15": 130.7,
+        "Enclos 19": 184.39,
+        "Enclos 21": 198.88,
+        "Enclos 20": 184.38,
+        "Toilettes (Plateau)": 175.6,
+        "Point d'eau (Plateau)": 148.6,
+        "Lodge": 132.03,
+        "Gare du plateau": 183.63
+    },
+    "Enclos 15": {
+        "Enclos 14": 130.7,
+        "Enclos 16": 114.28,
+        "Enclos 19": 156.26,
+        "Gare du plateau": 141.35,
+        "Plateau des jeux": 130.51,
+        "Point de rassemblement (Plateau)": 150.76
+    },
+    "Enclos 16": {
+        "Enclos 15": 114.28,
+        "Enclos 17": 98.01,
+        "Enclos 18": 145.77,
+        "Enclos 19": 168.32,
+        "Enclos 30": 133.99,
+        "Plateau des jeux": 133.22,
+        "Point de rassemblement (Plateau)": 199.33
+    },
+    "Enclos 17": {
+        "Enclos 16": 98.01,
+        "Enclos 18": 126.12,
+        "Enclos 30": 126.02
+    },
+    "Enclos 18": {
+        "Enclos 16": 145.77,
+        "Enclos 17": 126.12,
+        "Enclos 19": 106.17
+    },
+    "Enclos 19": {
+        "Enclos 14": 184.39,
+        "Enclos 15": 156.26,
+        "Enclos 16": 168.32,
+        "Enclos 18": 106.17
+    },
+    "Point de vue (Belvédère)": {
+        "Enclos 1": 165.3,
+        "Enclos 2": 116.85,
+        "Enclos 3": 119.15,
+        "Enclos 11": 188.73
+    },
+    "Enclos 30": {
+        "Enclos 16": 133.99,
+        "Enclos 17": 126.02,
+        "Enclos 31": 110.45,
+        "Enclos 60": 159.82,
+        "Plateau des jeux": 157.72
+    },
+    "Enclos 31": {
+        "Enclos 30": 110.45,
+        "Enclos 60": 92.66,
+        "Tente pédagogique": 162.31,
+        "Enclos 37": 146.35
+    },
+    "Enclos 60": {
+        "Enclos 30": 159.82,
+        "Enclos 31": 92.66,
+        "Enclos 28": 126.37,
+        "Enclos 29": 174.93,
+        "Tente pédagogique": 70.24,
+        "Plateau des jeux": 182.78,
+        "Enclos 37": 142.09
+    },
+    "Enclos 28": {
+        "Enclos 60": 126.37,
+        "Enclos 29": 160.73,
+        "Tente pédagogique": 59.41,
+        "Enclos 27": 143.74,
+        "Enclos 26": 102.84,
+        "Plateau des jeux": 166.01,
+        "Point de rassemblement (Plateau)": 154.74
+    },
+    "Enclos 29": {
+        "Enclos 9": 127.35,
+        "Enclos 60": 174.93,
+        "Enclos 28": 160.73,
+        "Tente pédagogique": 140.72,
+        "Enclos 26": 174.55,
+        "Enclos 46": 189.71,
+        "Enclos 41": 153.26,
+        "Enclos 37": 174.43,
+        "Point d'eau (Clairières)": 156.26
+    },
+    "Tente pédagogique": {
+        "Enclos 31": 162.31,
+        "Enclos 60": 70.24,
+        "Enclos 28": 59.41,
+        "Enclos 29": 140.72,
+        "Enclos 26": 153.0,
+        "Plateau des jeux": 176.4,
+        "Point de rassemblement (Plateau)": 189.89,
+        "Enclos 37": 184.05
+    },
+    "Enclos 27": {
+        "Enclos 28": 143.74,
+        "Enclos 26": 100.9,
+        "Enclos 25": 78.16,
+        "Enclos 24": 81.01,
+        "Gare du plateau": 156.78,
+        "Point de rassemblement (Plateau)": 145.0
+    },
+    "Enclos 26": {
+        "Enclos 9": 167.59,
+        "Enclos 28": 102.84,
+        "Enclos 29": 174.55,
+        "Tente pédagogique": 153.0,
+        "Enclos 27": 100.9,
+        "Enclos 25": 178.37,
+        "Enclos 24": 144.84
+    },
+    "Enclos 25": {
+        "Enclos 4": 193.75,
+        "Enclos 27": 78.16,
+        "Enclos 26": 178.37,
+        "Enclos 24": 85.42,
+        "Enclos 23": 122.8,
+        "Enclos 22": 151.42,
+        "Enclos 21": 195.79,
+        "Lodge": 185.27,
+        "Gare du plateau": 131.0,
+        "Point de rassemblement (Plateau)": 151.8
+    },
+    "Enclos 24": {
+        "Enclos 4": 132.97,
+        "Enclos 6": 151.42,
+        "Enclos 27": 81.01,
+        "Enclos 26": 144.84,
+        "Enclos 25": 85.42,
+        "Enclos 23": 184.45
+    },
+    "Enclos 23": {
+        "Enclos 25": 122.8,
+        "Enclos 24": 184.45,
+        "Enclos 22": 31.62,
+        "Enclos 21": 78.49,
+        "Enclos 20": 100.26,
+        "Toilettes (Plateau)": 156.65,
+        "Point d'eau (Plateau)": 174.09,
+        "Lodge": 106.89,
+        "Gare du plateau": 169.04
+    },
+    "Enclos 22": {
+        "Enclos 25": 151.42,
+        "Enclos 23": 31.62,
+        "Enclos 21": 46.87,
+        "Enclos 20": 68.77,
+        "Toilettes (Plateau)": 125.1,
+        "Point d'eau (Plateau)": 143.4,
+        "Lodge": 87.21,
+        "Gare du plateau": 178.06
+    },
+    "Enclos 21": {
+        "Enclos 12": 180.57,
+        "Enclos 14": 198.88,
+        "Enclos 25": 195.79,
+        "Enclos 23": 78.49,
+        "Enclos 22": 46.87,
+        "Enclos 20": 23.02,
+        "Toilettes (Plateau)": 78.57,
+        "Point d'eau (Plateau)": 99.32,
+        "Lodge": 75.8
+    },
+    "Enclos 20": {
+        "Enclos 12": 158.52,
+        "Enclos 13": 195.87,
+        "Enclos 14": 184.38,
+        "Enclos 23": 100.26,
+        "Enclos 22": 68.77,
+        "Enclos 21": 23.02,
+        "Toilettes (Plateau)": 56.4,
+        "Point d'eau (Plateau)": 76.32,
+        "Lodge": 71.61
+    },
+    "Toilettes (Plateau)": {
+        "Enclos 12": 118.0,
+        "Enclos 13": 161.01,
+        "Enclos 14": 175.6,
+        "Enclos 23": 156.65,
+        "Enclos 22": 125.1,
+        "Enclos 21": 78.57,
+        "Enclos 20": 56.4,
+        "Point d'eau (Plateau)": 31.4,
+        "Lodge": 103.31
+    },
+    "Point d'eau (Plateau)": {
+        "Enclos 11": 197.61,
+        "Enclos 12": 87.14,
+        "Enclos 13": 129.65,
+        "Enclos 14": 148.6,
+        "Enclos 23": 174.09,
+        "Enclos 22": 143.4,
+        "Enclos 21": 99.32,
+        "Enclos 20": 76.32,
+        "Toilettes (Plateau)": 31.4,
+        "Lodge": 100.66
+    },
+    "Lodge": {
+        "Enclos 12": 150.7,
+        "Enclos 13": 174.15,
+        "Enclos 14": 132.03,
+        "Enclos 25": 185.27,
+        "Enclos 23": 106.89,
+        "Enclos 22": 87.21,
+        "Enclos 21": 75.8,
+        "Enclos 20": 71.61,
+        "Toilettes (Plateau)": 103.31,
+        "Point d'eau (Plateau)": 100.66,
+        "Gare du plateau": 142.51
+    },
+    "Gare du plateau": {
+        "Enclos 14": 183.63,
+        "Enclos 15": 141.35,
+        "Enclos 27": 156.78,
+        "Enclos 25": 131.0,
+        "Enclos 23": 169.04,
+        "Enclos 22": 178.06,
+        "Lodge": 142.51,
+        "Plateau des jeux": 126.02,
+        "Point de rassemblement (Plateau)": 61.52
+    },
+    "Plateau des jeux": {
+        "Enclos 15": 130.51,
+        "Enclos 16": 133.22,
+        "Enclos 30": 157.72,
+        "Enclos 60": 182.78,
+        "Enclos 28": 166.01,
+        "Tente pédagogique": 176.4,
+        "Gare du plateau": 126.02,
+        "Point de rassemblement (Plateau)": 77.7
+    },
+    "Point de rassemblement (Plateau)": {
+        "Enclos 15": 150.76,
+        "Enclos 16": 199.33,
+        "Enclos 28": 154.74,
+        "Tente pédagogique": 189.89,
+        "Enclos 27": 145.0,
+        "Enclos 25": 151.8,
+        "Gare du plateau": 61.52,
+        "Plateau des jeux": 77.7
+    },
+    "Enclos 46": {
+        "Enclos 9": 187.96,
+        "Enclos 32": 109.18,
+        "Enclos 33": 197.65,
+        "Enclos 29": 189.71,
+        "Enclos 47": 79.01,
+        "Enclos 41": 96.13,
+        "Enclos 42": 160.21,
+        "Point d'eau (Clairières)": 53.15,
+        "Toilettes (Clairières)": 139.28
+    },
+    "Enclos 47": {
+        "Enclos 32": 124.17,
+        "Enclos 33": 186.6,
+        "Enclos 46": 79.01,
+        "Enclos 49": 182.62,
+        "Enclos 48": 137.57,
+        "Enclos 41": 128.32,
+        "Enclos 42": 114.02,
+        "Point d'eau (Clairières)": 104.45,
+        "Toilettes (Clairières)": 67.42
+    },
+    "Enclos 49": {
+        "Enclos 34": 101.27,
+        "Enclos 47": 182.62,
+        "Enclos 48": 76.49,
+        "Enclos 42": 185.04,
+        "Enclos 43": 171.57,
+        "Toilettes (Clairières)": 138.0
+    },
+    "Enclos 48": {
+        "Enclos 34": 160.85,
+        "Enclos 47": 137.57,
+        "Enclos 49": 76.49,
+        "Enclos 42": 109.62,
+        "Enclos 43": 119.85,
+        "Toilettes (Clairières)": 76.06
+    },
+    "Enclos 41": {
+        "Enclos 29": 153.26,
+        "Enclos 46": 96.13,
+        "Enclos 47": 128.32,
+        "Enclos 42": 126.32,
+        "Enclos 39": 119.57,
+        "Enclos 37": 182.99,
+        "Point d'eau (Clairières)": 44.41,
+        "Toilettes (Clairières)": 150.62
+    },
+    "Enclos 42": {
+        "Enclos 46": 160.21,
+        "Enclos 47": 114.02,
+        "Enclos 49": 185.04,
+        "Enclos 48": 109.62,
+        "Enclos 41": 126.32,
+        "Enclos 43": 135.56,
+        "Enclos 39": 144.42,
+        "Point d'eau (Clairières)": 142.24,
+        "Toilettes (Clairières)": 68.25
+    },
+    "Enclos 43": {
+        "Enclos 49": 171.57,
+        "Enclos 48": 119.85,
+        "Enclos 42": 135.56,
+        "Enclos 44": 117.71,
+        "Enclos 45": 193.74,
+        "Enclos 40": 128.0,
+        "Toilettes (Clairières)": 162.66
+    },
+    "Enclos 44": {
+        "Enclos 43": 117.71,
+        "Enclos 45": 85.56,
+        "Enclos 40": 158.49,
+        "Point de rassemblement (Clairières)": 116.39
+    },
+    "Enclos 45": {
+        "Enclos 43": 193.74,
+        "Enclos 44": 85.56,
+        "Enclos 40": 182.17,
+        "Point de rassemblement (Clairières)": 57.25
+    },
+    "Enclos 50": {
+        "Enclos 51": 129.06,
+        "Point de rassemblement (Clairières)": 164.71,
+        "Sortie de secours (Clairières)": 193.54
+    },
+    "Enclos 51": {
+        "Enclos 35": 178.47,
+        "Enclos 36": 172.82,
+        "Sortie de secours (Bois des Pins)": 150.4,
+        "Enclos 50": 129.06,
+        "Point de rassemblement (Clairières)": 171.09
+    },
+    "Enclos 40": {
+        "Enclos 43": 128.0,
+        "Enclos 44": 158.49,
+        "Enclos 45": 182.17
+    },
+    "Enclos 39": {
+        "Enclos 41": 119.57,
+        "Enclos 42": 144.42,
+        "Enclos 37": 117.2,
+        "Point de vue (Clairières)": 187.27,
+        "Point d'eau (Clairières)": 163.78
+    },
+    "Enclos 37": {
+        "Enclos 31": 146.35,
+        "Enclos 60": 142.09,
+        "Enclos 29": 174.43,
+        "Tente pédagogique": 184.05,
+        "Enclos 41": 182.99,
+        "Enclos 39": 117.2,
+        "Point de vue (Clairières)": 179.51
+    },
+    "Point de vue (Clairières)": {
+        "Enclos 39": 187.27,
+        "Enclos 37": 179.51
+    },
+    "Point d'eau (Clairières)": {
+        "Enclos 9": 189.78,
+        "Enclos 32": 162.26,
+        "Enclos 29": 156.26,
+        "Enclos 46": 53.15,
+        "Enclos 47": 104.45,
+        "Enclos 41": 44.41,
+        "Enclos 42": 142.24,
+        "Enclos 39": 163.78,
+        "Toilettes (Clairières)": 145.67
+    },
+    "Toilettes (Clairières)": {
+        "Enclos 32": 187.72,
+        "Enclos 34": 189.83,
+        "Enclos 46": 139.28,
+        "Enclos 47": 67.42,
+        "Enclos 49": 138.0,
+        "Enclos 48": 76.06,
+        "Enclos 41": 150.62,
+        "Enclos 42": 68.25,
+        "Enclos 43": 162.66,
+        "Point d'eau (Clairières)": 145.67
+    },
+    "Point de rassemblement (Clairières)": {
+        "Enclos 35": 188.53,
+        "Enclos 44": 116.39,
+        "Enclos 45": 57.25,
+        "Enclos 50": 164.71,
+        "Enclos 51": 171.09
+    },
+    "Sortie de secours (Clairières)": {
+        "Enclos 50": 193.54
+    },
+    "Boutique": {
+        "Enclos 10": 137.36,
+        "Poste de secours": 65.3
+    },
+    "Poste de secours": {
+        "Enclos 1": 199.49,
+        "Boutique": 65.3
+    },
+    "Petit café": {},
+    "Gare des cascades": {
+        "Enclos 1": 100.77,
+        "Enclos 2": 102.11,
+        "Enclos 3": 96.75,
+        "Restaurant du parc": 149.72
+    },
+    "Restaurant du parc": {
+        "Gare des cascades": 149.72
+    }
+}
