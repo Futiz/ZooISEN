@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -19,8 +20,8 @@ import fr.isen.sannicolas.zooisen.R
 
 data class ParkService(
     val name: String,
-    val icon: Int,  // Ressource drawable de l'icône
-    val location: String  // Localisation dans le parc
+    val icon: Int,
+    val location: String
 )
 
 @Composable
@@ -34,7 +35,7 @@ fun ParkServiceScreen(navController: NavHostController) {
         ParkService("Tente pédagogique", R.drawable.tente, "Dans le biome 'Le Plateau'"),
         ParkService("Paillote", R.drawable.paillote, "Proche du restaurant du parc et dans le biome 'Le Plateau'"),
         ParkService("Café nomade", R.drawable.cafe, "Dans le biome 'le Vallon des Cascades'"),
-        ParkService("Petit Café", R.drawable.petitcafe, "À côté de l'entréée de la Bergerie des reptiles"),
+        ParkService("Petit Café", R.drawable.petitcafe, "À côté de l'entrée de la Bergerie des reptiles"),
         ParkService("Plateau des jeux", R.drawable.plateau, "Dans le biome 'Le Plateau'"),
         ParkService("Espace Pique-nique", R.drawable.piquenique, "Présent dans plusieurs zones"),
         ParkService("Point de vue", R.drawable.pointdevue, "Situé dans 'Le Belvédère', 'les Clairières' et 'Le Plateau'"),
@@ -59,6 +60,44 @@ fun ParkServiceScreen(navController: NavHostController) {
             LazyColumn {
                 items(parkServices) { service ->
                     ServiceCard(service)
+                }
+
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { navController.navigate("park_map") },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF2196F3))
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.plan),
+                                contentDescription = "Plan du Parc",
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .padding(end = 16.dp),
+                                contentScale = ContentScale.Fit
+                            )
+
+                            Column {
+                                Text(
+                                    text = "Plan du Parc",
+                                    fontSize = 18.sp,
+                                    color = Color.White
+                                )
+                                Text(
+                                    text = "Accédez à la carte interactive",
+                                    fontSize = 14.sp,
+                                    color = Color.White.copy(alpha = 0.8f)
+                                )
+                            }
+                        }
+                    }
                 }
             }
 

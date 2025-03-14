@@ -77,7 +77,6 @@ fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostC
     val userId = "User123" // TODO: Récupérer l'ID réel de l'utilisateur connecté
     var rating by remember { mutableStateOf(0) }
 
-    // 🔥 Récupération de la note stockée
     LaunchedEffect(enclosure.id) {
         val ratingRef = FirebaseDatabase.getInstance()
             .getReference("biomes")
@@ -111,7 +110,6 @@ fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostC
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 🔹 Liste des animaux gardés dans l'enclos
             Text(text = "Animaux :", fontWeight = FontWeight.Bold)
             enclosure.animals.forEach { animal ->
                 Text(text = "• ${animal.name}")
@@ -119,7 +117,6 @@ fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostC
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 🔥 Barre de notation (avec sauvegarde)
             Text(text = "Notez cet enclos :", fontWeight = FontWeight.Bold)
             RatingBar(currentRating = rating) { selectedRating ->
                 rating = selectedRating

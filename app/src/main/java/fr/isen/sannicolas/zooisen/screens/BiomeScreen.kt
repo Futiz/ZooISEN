@@ -28,7 +28,7 @@ fun BiomeScreen(navController: NavHostController) {
 
     LaunchedEffect(Unit) {
         Database.fetchBiomes(
-            onSuccess = { biomes = it.filterIndexed { index, _ -> index < 6 } }, // ✅ Filtrage des 6 premiers biomes
+            onSuccess = { biomes = it.filterIndexed { index, _ -> index < 6 } },
             onFailure = { errorMessage = it.message }
         )
     }
@@ -58,7 +58,6 @@ fun BiomeScreen(navController: NavHostController) {
                     BiomeItem(biome, navController)
                 }
 
-                // ✅ Ajout de la carte "Park Services"
                 item {
                     Card(
                         modifier = Modifier
@@ -67,20 +66,27 @@ fun BiomeScreen(navController: NavHostController) {
                             .clickable { navController.navigate("park_services") },
                         shape = RoundedCornerShape(16.dp),
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF4CAF50)) // ✅ Couleur verte
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF4CAF50))
                     ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
+                        Column {
+                            Image(
+                                painter = painterResource(id = R.drawable.parc),
+                                contentDescription = "Park Services & Map",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp),
+                                contentScale = ContentScale.Crop
+                            )
                             Text(
-                                text = "Park Services",
+                                text = "Park Services & Map",
                                 style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(16.dp),
                                 color = Color.White
                             )
                         }
                     }
                 }
+
             }
         }
     }
@@ -90,7 +96,7 @@ fun BiomeScreen(navController: NavHostController) {
 fun BiomeItem(biome: Biome, navController: NavHostController) {
     val safeColor = try {
         if (biome.color.isNotBlank()) {
-            Color(biome.color.toColorInt()) // ✅ Utilisation de `toColorInt()` pour éviter les erreurs
+            Color(biome.color.toColorInt())
         } else {
             Color.Gray
         }
@@ -105,7 +111,7 @@ fun BiomeItem(biome: Biome, navController: NavHostController) {
             .clickable { navController.navigate("enclosures/${biome.name}") },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = safeColor) // ✅ Utilisation sécurisée
+        colors = CardDefaults.cardColors(containerColor = safeColor)
     ) {
         Column {
             Image(
@@ -126,7 +132,6 @@ fun BiomeItem(biome: Biome, navController: NavHostController) {
     }
 }
 
-// Fonction pour récupérer une image selon le biome
 fun getBiomeImage(biomeName: String): Int {
     return when (biomeName) {
         "La Bergerie des reptiles" -> R.drawable.reptile

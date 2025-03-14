@@ -13,6 +13,7 @@ import fr.isen.sannicolas.zooisen.screens.EnclosureScreen
 import fr.isen.sannicolas.zooisen.screens.ParkServiceScreen
 import fr.isen.sannicolas.zooisen.screens.EnclosureCommentScreen
 import fr.isen.sannicolas.zooisen.ui.theme.ZooISENTheme
+import fr.isen.sannicolas.zooisen.screens.ParkMapScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,28 +26,28 @@ class MainActivity : ComponentActivity() {
                     startDestination = "biomes",
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // ✅ Écran des Biomes
                     composable("biomes") {
                         BiomeScreen(navController)
                     }
 
-                    // ✅ Écran des Services du Parc
                     composable("park_services") {
                         ParkServiceScreen(navController)
                     }
 
-                    // ✅ Écran des Enclos (dans un biome)
                     composable("enclosures/{biomeId}") { backStackEntry ->
                         val biomeId = backStackEntry.arguments?.getString("biomeId") ?: ""
                         EnclosureScreen(navController, biomeId)
                     }
 
-                    // ✅ Écran des Commentaires d'un enclos spécifique
                     composable("enclosure_comments/{biomeId}/{enclosureId}") { backStackEntry ->
                         val biomeId = backStackEntry.arguments?.getString("biomeId") ?: ""
                         val enclosureId = backStackEntry.arguments?.getString("enclosureId") ?: ""
                         EnclosureCommentScreen(navController, biomeId, enclosureId)
                     }
+                    composable("park_map") {
+                        ParkMapScreen(navController)
+                    }
+
                 }
             }
         }
