@@ -10,7 +10,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import fr.isen.sannicolas.zooisen.screens.BiomeScreen
+import fr.isen.sannicolas.zooisen.screens.EnclosureScreen
+import fr.isen.sannicolas.zooisen.screens.ParkServiceScreen
+import fr.isen.sannicolas.zooisen.screens.EnclosureCommentScreen
+import fr.isen.sannicolas.zooisen.screens.ParkMapScreen
 import fr.isen.sannicolas.zooisen.ui.theme.ZooISENTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,24 +26,36 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ZooISENTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = "biomes",
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    composable("biomes") {
+                        BiomeScreen(navController)
+                    }
+
+                    composable("park_services") {
+                        ParkServiceScreen(navController)
+                    }
+
+                    composable("enclosures/{biomeId}") { backStackEntry ->
+                        val biomeId = backStackEntry.arguments?.getString("biomeId") ?: ""
+                        EnclosureScreen(navController, biomeId)
+                    }
+
+                    composable("enclosure_comments/{biomeId}/{enclosureId}") { backStackEntry ->
+                        val biomeId = backStackEntry.arguments?.getString("biomeId") ?: ""
+                        val enclosureId = backStackEntry.arguments?.getString("enclosureId") ?: ""
+                        EnclosureCommentScreen(navController, biomeId, enclosureId)
+                    }
+                    composable("park_map") {
+                        ParkMapScreen(navController)
+                    }
                 }
             }
         }
     }
 }
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-
 
