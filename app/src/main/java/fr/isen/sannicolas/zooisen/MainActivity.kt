@@ -16,6 +16,10 @@ import fr.isen.sannicolas.zooisen.database.Biome
 import fr.isen.sannicolas.zooisen.database.Database
 import fr.isen.sannicolas.zooisen.ui.theme.ZooISENTheme
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import fr.isen.sannicolas.zooisen.screens.*
 
 
 class MainActivity : ComponentActivity() {
@@ -26,9 +30,18 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "biomes",
+                    startDestination = "auth",
                     modifier = Modifier.fillMaxSize()
                 ) {
+                    composable("auth") {
+                        AuthScreen(navController)
+                    }
+                    composable("register") {
+                        RegisterScreen(navController)
+                    }
+                    composable("create") {
+                        CreateAccountScreen(navController)
+                    }
                     composable("biomes") {
                         BiomeScreen(navController)
                     }

@@ -3,7 +3,6 @@ package fr.isen.sannicolas.zooisen.screens
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -51,7 +50,7 @@ fun CreateAccountScreen(navController: NavController, modifier: Modifier = Modif
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.barben),
+                painter = painterResource(id = R.drawable.parc),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxWidth()

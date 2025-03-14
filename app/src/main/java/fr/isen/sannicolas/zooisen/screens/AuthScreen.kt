@@ -1,4 +1,5 @@
-import android.util.Log
+package fr.isen.sannicolas.zooisen.screens
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,8 +20,11 @@ import android.widget.Toast
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavController
+import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import fr.isen.sannicolas.zooisen.R
+import fr.isen.sannicolas.zooisen.screens.*
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +41,7 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
         val context = LocalContext.current
 
         Image(
-            painter = painterResource(id = R.drawable.barben),
+            painter = painterResource(id = R.drawable.parc),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()
@@ -108,6 +112,7 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
                                 if (task.isSuccessful) {
                                     Toast.makeText(context, "Connexion réussie !", Toast.LENGTH_SHORT).show()
                                     //Log.d("essai","REUSSI BROTHER")
+                                    navController.navigate("biomes")
                                 } else {
                                     errorMessage = task.exception?.message ?: context.getString(R.string.unknown_error)
 

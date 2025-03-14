@@ -50,7 +50,7 @@ fun RegisterScreen(navController: NavController, modifier: Modifier = Modifier) 
         modifier = modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.barben), // Image de fond
+            painter = painterResource(id = R.drawable.parc), // Image de fond
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()
