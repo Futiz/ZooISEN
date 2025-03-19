@@ -1,6 +1,8 @@
 package fr.isen.sannicolas.zooisen.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,92 +26,100 @@ data class ParkService(
     val location: String
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParkServiceScreen(navController: NavHostController) {
     val parkServices = listOf(
         ParkService("Toilettes", R.drawable.toilettes, "La Bergerie des Reptiles, le Plateau et les Clairières"),
-        ParkService("Point d'eau", R.drawable.pointdeau, "Le Plateau, le Vallon des cascades et les Clairières"),
+        ParkService("Point d'eau", R.drawable.pointdeau, "Le Plateau, le Vallon des Cascades et les Clairières"),
         ParkService("Boutique", R.drawable.boutique, "À l'entrée du parc"),
         ParkService("Gare", R.drawable.gare, "Dans le biome 'Le Plateau' et à l'entrée du Parc"),
         ParkService("Lodge", R.drawable.lodge, "Dans le biome 'Le Plateau'"),
         ParkService("Tente pédagogique", R.drawable.tente, "Dans le biome 'Le Plateau'"),
         ParkService("Paillote", R.drawable.paillote, "Proche du restaurant du parc et dans le biome 'Le Plateau'"),
-        ParkService("Café nomade", R.drawable.cafe, "Dans le biome 'le Vallon des Cascades'"),
+        ParkService("Café nomade", R.drawable.cafe, "Dans le biome 'Le Vallon des Cascades'"),
         ParkService("Petit Café", R.drawable.petitcafe, "À côté de l'entrée de la Bergerie des reptiles"),
         ParkService("Plateau des jeux", R.drawable.plateau, "Dans le biome 'Le Plateau'"),
         ParkService("Espace Pique-nique", R.drawable.piquenique, "Présent dans plusieurs zones"),
-        ParkService("Point de vue", R.drawable.pointdevue, "Situé dans 'Le Belvédère', 'les Clairières' et 'Le Plateau'"),
-        ParkService("Sortie de secours", R.drawable.sortiesecours, "Entrée du parc, le Vallon des cascades, le Bois des pins et les Clairières"),
+        ParkService("Point de vue", R.drawable.pointdevue, "Situé dans 'Le Belvédère', 'Les Clairières' et 'Le Plateau'"),
+        ParkService("Sortie de secours", R.drawable.sortiesecours, "Entrée du parc, le Vallon des Cascades, le Bois des Pins et les Clairières"),
         ParkService("Poste de secours", R.drawable.postedesecours, "À l'entrée du parc"),
-        ParkService("Point de rassemblement", R.drawable.pointrassemblement, "Entrée du parc, le Vallon des cascades, le Plateau et les Clairières")
+        ParkService("Point de rassemblement", R.drawable.pointrassemblement, "Entrée du parc, le Vallon des Cascades, le Plateau et les Clairières")
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Services du Parc",
-                fontSize = 24.sp,
-                color = Color(0xFF333333)
+    Scaffold(
+        containerColor = Color(0xFFF5E9D2),
+        topBar = {
+            TopAppBar(
+                title = { Text("Services du Parc", color = Color.White, fontWeight = FontWeight.Bold) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFD4C1A4))
             )
-            Spacer(modifier = Modifier.height(16.dp))
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    items(parkServices) { service ->
+                        ServiceCard(service)
+                    }
 
-            LazyColumn {
-                items(parkServices) { service ->
-                    ServiceCard(service)
-                }
-
-                item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable { navController.navigate("park_map") },
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF2196F3))
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                    item {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .clickable { navController.navigate("park_map") },
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFF2196F3)),
+                            border = BorderStroke(2.dp, Color.White) // Liseré blanc
                         ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.plan),
-                                contentDescription = "Plan du Parc",
-                                modifier = Modifier
-                                    .size(60.dp)
-                                    .padding(end = 16.dp),
-                                contentScale = ContentScale.Fit
-                            )
+                            Row(
+                                modifier = Modifier.padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.plan),
+                                    contentDescription = "Plan du Parc",
+                                    modifier = Modifier
+                                        .size(60.dp)
+                                        .padding(end = 16.dp),
+                                    contentScale = ContentScale.Fit
+                                )
 
-                            Column {
-                                Text(
-                                    text = "Plan du Parc",
-                                    fontSize = 18.sp,
-                                    color = Color.White
-                                )
-                                Text(
-                                    text = "Accédez à la carte interactive",
-                                    fontSize = 14.sp,
-                                    color = Color.White.copy(alpha = 0.8f)
-                                )
+                                Column {
+                                    Text(
+                                        text = "Plan du Parc",
+                                        fontSize = 18.sp,
+                                        color = Color.White
+                                    )
+                                    Text(
+                                        text = "Accédez à la carte interactive",
+                                        fontSize = 14.sp,
+                                        color = Color.White.copy(alpha = 0.8f)
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { navController.popBackStack() },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF005BBB))
-            ) {
-                Text("Retour", color = Color.White)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { navController.popBackStack() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF005BBB)),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Retour", color = Color.White)
+                }
             }
         }
-    }
+    )
 }
 
 @Composable
@@ -119,7 +129,8 @@ fun ServiceCard(service: ParkService) {
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF484848)), // Fond gris foncé
+        border = BorderStroke(2.dp, Color.White) // Ajout du liseré blanc
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -138,12 +149,12 @@ fun ServiceCard(service: ParkService) {
                 Text(
                     text = service.name,
                     fontSize = 18.sp,
-                    color = Color.Black
+                    color = Color.White
                 )
                 Text(
                     text = service.location,
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.LightGray
                 )
             }
         }

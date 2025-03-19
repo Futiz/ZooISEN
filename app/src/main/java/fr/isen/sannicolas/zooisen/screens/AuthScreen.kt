@@ -1,7 +1,9 @@
 package fr.isen.sannicolas.zooisen.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,14 +19,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.widget.Toast
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.draw.clip
 import androidx.navigation.NavController
-import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import fr.isen.sannicolas.zooisen.R
-import fr.isen.sannicolas.zooisen.screens.*
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,97 +35,109 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        val context = LocalContext.current
+    val backgroundColor = Color(0xFFF5E9D2)
+    val buttonColor = Color(0xFFA35632)
 
-        Image(
-            painter = painterResource(id = R.drawable.parc),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
-        )
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+            .padding(16.dp)
+    ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
-            Text("Connexion", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White)
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text(stringResource(id=R.string.Email)) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+            // 🔹 Logo en rond
+            Image(
+                painter = painterResource(id = R.drawable.parc),
+                contentDescription = "Logo du parc",
                 modifier = Modifier
-                    .fillMaxWidth(),
-                textStyle = TextStyle(color = Color.Black),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = Color.White,
-                    focusedBorderColor = Color.Blue,
-                    unfocusedBorderColor = Color.Gray,
-                    focusedLabelColor = Color.Blue,
-                    unfocusedLabelColor = Color.Gray
-                )
+                    .size(180.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
             )
 
 
+            Spacer(modifier = Modifier.height(16.dp))
 
 
+            Text("Connexion", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 🔹 Champ Email
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    containerColor = Color.White,
+                    focusedBorderColor = Color.Blue,
+                    unfocusedBorderColor = Color.Gray
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 🔹 Champ Mot de passe
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text(stringResource(id=R.string.password)) },
+                label = { Text("Mot de passe") },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White,
                     focusedBorderColor = Color.Blue,
-                    unfocusedBorderColor = Color.Gray,
-                    focusedLabelColor = Color.Blue,
-                    unfocusedLabelColor = Color.Gray)
+                    unfocusedBorderColor = Color.Gray
+                )
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // 🔹 Message d’erreur (si existant)
             errorMessage?.let {
                 Text(it, color = Color.Red, fontSize = 14.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // 🔹 Bouton Connexion
             if (isLoading) {
                 CircularProgressIndicator()
             } else {
                 Button(
                     onClick = {
-
                         isLoading = true
                         auth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener { task ->
                                 isLoading = false
                                 if (task.isSuccessful) {
                                     Toast.makeText(context, "Connexion réussie !", Toast.LENGTH_SHORT).show()
-                                    //Log.d("essai","REUSSI BROTHER")
                                     navController.navigate("biomes")
                                 } else {
-                                    errorMessage = task.exception?.message ?: context.getString(R.string.unknown_error)
-
+                                    errorMessage = task.exception?.message ?: "Erreur inconnue"
                                 }
                             }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = email.isNotEmpty() && password.isNotEmpty()
+                    enabled = email.isNotEmpty() && password.isNotEmpty(),
+                    colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
+
                 ) {
-                    Text(stringResource(id=R.string.sign_up))
+                    Text("Se connecter")
                 }
             }
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             TextButton(onClick = { navController.navigate("register") }) {
-                Text(stringResource(id=R.string.Create_account), color = Color.White)
+                Text("Créer un compte", color = Color.Black)
             }
         }
     }

@@ -1,6 +1,5 @@
 package fr.isen.sannicolas.zooisen.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,6 +16,7 @@ import androidx.navigation.NavHostController
 import fr.isen.sannicolas.zooisen.database.Comment
 import fr.isen.sannicolas.zooisen.database.Database
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnclosureCommentScreen(navController: NavHostController, biomeId: String, enclosureId: String) {
     var comments by remember { mutableStateOf<List<Comment>>(emptyList()) }
@@ -31,65 +31,116 @@ fun EnclosureCommentScreen(navController: NavHostController, biomeId: String, en
         )
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
-            .padding(16.dp)
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Spacer(modifier = Modifier.height(60.dp))
-
-            Text(
-                text = "Commentaires pour l'Enclos $enclosureId",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333)
+    Scaffold(
+        containerColor = Color(0xFFF5E9D2),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Commentaires - Enclos $enclosureId",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFD4C1A4))
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LazyColumn(
-                modifier = Modifier.weight(1f).fillMaxWidth()
+        },
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(comments) { comment ->
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)
+                LazyColumn(
+                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(comments) { comment ->
+                        CommentCard(comment)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = newComment,
+                    onValueChange = { newComment = it },
+                    label = { Text("Ajouter un commentaire", color = Color.White) },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = Color.White, // ✅ Texte en blanc
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White,
+                        focusedContainerColor = Color(0xFF484848), // ✅ Fond plus foncé
+                        unfocusedContainerColor = Color(0xFF3C3C3C), // ✅ Fond gris doux
+                        focusedIndicatorColor = Color(0xFF1976D2),
+                        unfocusedIndicatorColor = Color.Gray
+                    ),
+                            modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF757575)),
+                        shape = RoundedCornerShape(12.dp)
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                text = comment.author,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF007AFF)
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = comment.text, fontSize = 14.sp, color = Color(0xFF555555))
-                        }
+                        Text("Retour", color = Color.White)
+                    }
+
+                    Button(
+                        onClick = {
+                            if (newComment.isNotBlank()) {
+                                Database.addComment(
+                                    biomeId, enclosureId, "Utilisateur", newComment,
+                                    onSuccess = { newComment = "" },
+                                    onFailure = { println("❌ Échec envoi commentaire") }
+                                )
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2)), // Bleu cohérent
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Envoyer", color = Color.White)
                     }
                 }
             }
+        }
+    )
+}
 
-            OutlinedTextField(
-                value = newComment,
-                onValueChange = { newComment = it },
-                label = { Text("Ajouter un commentaire") },
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.fillMaxWidth()
+@Composable
+fun CommentCard(comment: Comment) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF484848)), // Gris foncé doux
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = comment.author,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1976D2)
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(onClick = { navController.popBackStack() }) { Text("Retour") }
-                Button(onClick = { if (newComment.isNotBlank()) Database.addComment(biomeId, enclosureId, "Utilisateur", newComment, { newComment = "" }, {}) }) { Text("Envoyer") }
-            }
+            Text(
+                text = comment.text,
+                fontSize = 14.sp,
+                color = Color(0xFFEEEEEE)
+            )
         }
     }
 }

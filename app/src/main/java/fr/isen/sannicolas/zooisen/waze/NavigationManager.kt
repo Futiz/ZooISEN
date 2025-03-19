@@ -1,4 +1,4 @@
-package fr.isen.sannicolas.zooisen.utils
+package fr.isen.sannicolas.zooisen.waze
 
 import android.content.Context
 import com.google.gson.Gson
@@ -6,13 +6,12 @@ import com.google.gson.reflect.TypeToken
 import java.io.InputStreamReader
 import java.util.PriorityQueue
 
-// Définition des données du graphe
 typealias Graph = Map<String, Map<String, Double>>
 
 object NavigationManager {
     private var zooGraph: Graph = emptyMap()
 
-    // Charger le graphe depuis zooGraph.json
+    // Charger le graphe
     fun loadGraph(context: Context) {
         try {
             val inputStream = context.assets.open("zooGraph.json")
@@ -25,30 +24,33 @@ object NavigationManager {
         }
     }
 
-    // Trouver le plus court chemin avec Dijkstra
-    fun findShortestPath(start: String, end: String): List<String> {
+    // Algorithme A* (A Star)
+    fun findShortestPathAStar(start: String, end: String): List<String> {
         if (!zooGraph.containsKey(start) || !zooGraph.containsKey(end)) {
             return listOf("❌ Erreur : '$start' ou '$end' n'existe pas dans le graphe.")
         }
 
         val distances = mutableMapOf<String, Double>().withDefault { Double.MAX_VALUE }
+        val estimatedTotalCost = mutableMapOf<String, Double>().withDefault { Double.MAX_VALUE }
         val previousNodes = mutableMapOf<String, String?>()
         val priorityQueue = PriorityQueue<Pair<String, Double>>(compareBy { it.second })
 
         distances[start] = 0.0
-        priorityQueue.add(start to 0.0)
+        estimatedTotalCost[start] = heuristic(start, end)
+        priorityQueue.add(start to estimatedTotalCost[start]!!)
 
         while (priorityQueue.isNotEmpty()) {
-            val (currentNode, currentDist) = priorityQueue.poll()
+            val (currentNode, _) = priorityQueue.poll()
 
             if (currentNode == end) break
 
             zooGraph[currentNode]?.forEach { (neighbor, distance) ->
-                val newDist = currentDist + distance
+                val newDist = distances.getValue(currentNode) + distance
                 if (newDist < distances.getValue(neighbor)) {
                     distances[neighbor] = newDist
+                    estimatedTotalCost[neighbor] = newDist + heuristic(neighbor, end)
                     previousNodes[neighbor] = currentNode
-                    priorityQueue.add(neighbor to newDist)
+                    priorityQueue.add(neighbor to estimatedTotalCost[neighbor]!!)
                 }
             }
         }
@@ -56,7 +58,12 @@ object NavigationManager {
         return reconstructPath(previousNodes, start, end)
     }
 
-    // Reconstruire le chemin optimal
+    // Heuristique : estimation basée sur la distance minimale d’une arête
+    private fun heuristic(node: String, target: String): Double {
+        return zooGraph[node]?.values?.minOrNull() ?: 1.0 // Distance minimale connue vers un voisin
+    }
+
+    // Reconstruire le chemin
     private fun reconstructPath(previousNodes: Map<String, String?>, start: String, end: String): List<String> {
         val path = mutableListOf<String>()
         var current: String? = end
