@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import fr.isen.sannicolas.zooisen.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,12 +38,7 @@ fun CreateAccountScreen(navController: NavController, modifier: Modifier = Modif
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = modifier.fillMaxSize()) {
-        val context = LocalContext.current // Récupérer le contexte
-
-
-
         Column(
-
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
@@ -55,30 +51,34 @@ fun CreateAccountScreen(navController: NavController, modifier: Modifier = Modif
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxWidth()
             )
-            Text(stringResource(id=R.string.Create_account), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White)
+
+            Text(
+                text = stringResource(id = R.string.Create_account),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
 
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text(stringResource(id=R.string.Email)) },
+                label = { Text(stringResource(id = R.string.Email)) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textStyle = TextStyle(color = Color.Black), // Définit la couleur du texte
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(color = Color.Black),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White,
                     focusedBorderColor = Color.Blue,
                     unfocusedBorderColor = Color.Gray,
                     focusedLabelColor = Color.Blue,
-                    unfocusedLabelColor = Color.Gray)
+                    unfocusedLabelColor = Color.Gray
+                )
             )
-
-
 
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text(stringResource(id=R.string.password)) },
+                label = { Text(stringResource(id = R.string.password)) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
@@ -87,14 +87,14 @@ fun CreateAccountScreen(navController: NavController, modifier: Modifier = Modif
                     focusedBorderColor = Color.Blue,
                     unfocusedBorderColor = Color.Gray,
                     focusedLabelColor = Color.Blue,
-                    unfocusedLabelColor = Color.Gray)
-
+                    unfocusedLabelColor = Color.Gray
+                )
             )
 
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = { Text(stringResource(id=R.string.confirm_password)) },
+                label = { Text(stringResource(id = R.string.confirm_password)) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
@@ -140,7 +140,18 @@ fun CreateAccountScreen(navController: NavController, modifier: Modifier = Modif
                             .addOnCompleteListener { task ->
                                 isLoading = false
                                 if (task.isSuccessful) {
-                                    Toast.makeText(context,R.string.account_created, Toast.LENGTH_SHORT).show()
+                                    val uid = auth.currentUser?.uid
+                                    if (uid != null) {
+                                        val userRef = FirebaseDatabase.getInstance().getReference("users").child(uid)
+                                        userRef.setValue(
+                                            mapOf(
+                                                "email" to email,
+                                                "isAdmin" to false // par défaut
+                                            )
+                                        )
+                                    }
+
+                                    Toast.makeText(context, R.string.account_created, Toast.LENGTH_SHORT).show()
                                     navController.navigate("auth")
                                 } else {
                                     errorMessage = task.exception?.message ?: context.getString(R.string.unknown_error)
@@ -150,12 +161,12 @@ fun CreateAccountScreen(navController: NavController, modifier: Modifier = Modif
                     modifier = Modifier.fillMaxWidth(),
                     enabled = email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()
                 ) {
-                    Text(stringResource(id=R.string.sign_up))
+                    Text(stringResource(id = R.string.sign_up))
                 }
             }
 
             TextButton(onClick = { navController.navigate("auth") }) {
-                Text(stringResource(id=R.string.arlready_an_account), color = Color.White)
+                Text(stringResource(id = R.string.arlready_an_account), color = Color.White)
             }
         }
     }

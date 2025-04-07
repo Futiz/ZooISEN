@@ -1,5 +1,6 @@
 package fr.isen.sannicolas.zooisen.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,20 +12,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import android.widget.Toast
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavController
-import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import fr.isen.sannicolas.zooisen.R
-import fr.isen.sannicolas.zooisen.screens.*
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,9 +35,7 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        val context = LocalContext.current
-
+    Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.parc),
             contentDescription = null,
@@ -54,15 +50,19 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Connexion", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(
+                text = "Connexion",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
 
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text(stringResource(id=R.string.Email)) },
+                label = { Text(stringResource(id = R.string.Email)) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(color = Color.Black),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White,
@@ -73,13 +73,10 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
                 )
             )
 
-
-
-
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text(stringResource(id=R.string.password)) },
+                label = { Text(stringResource(id = R.string.password)) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
@@ -88,7 +85,8 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
                     focusedBorderColor = Color.Blue,
                     unfocusedBorderColor = Color.Gray,
                     focusedLabelColor = Color.Blue,
-                    unfocusedLabelColor = Color.Gray)
+                    unfocusedLabelColor = Color.Gray
+                )
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -104,30 +102,39 @@ fun AuthScreen(navController: NavController, modifier: Modifier = Modifier) {
             } else {
                 Button(
                     onClick = {
-
                         isLoading = true
                         auth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener { task ->
                                 isLoading = false
                                 if (task.isSuccessful) {
-                                    Toast.makeText(context, "Connexion réussie !", Toast.LENGTH_SHORT).show()
-                                    //Log.d("essai","REUSSI BROTHER")
-                                    navController.navigate("biomes")
+                                    val userId = auth.currentUser?.uid
+                                    val userRef = FirebaseDatabase.getInstance().getReference("users").child(userId!!)
+
+                                    userRef.get().addOnSuccessListener { snapshot ->
+                                        val isAdmin = snapshot.child("isAdmin").getValue(Boolean::class.java) ?: false
+                                        if (isAdmin) {
+                                            Toast.makeText(context, "Bienvenue dans le panneau admin 👑", Toast.LENGTH_SHORT).show()
+                                            navController.navigate("admin_enclosures")
+                                        } else {
+                                            navController.navigate("biomes")
+                                        }
+                                    }.addOnFailureListener {
+                                        errorMessage = "Erreur lors de la récupération des données utilisateur."
+                                    }
                                 } else {
                                     errorMessage = task.exception?.message ?: context.getString(R.string.unknown_error)
-
                                 }
                             }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = email.isNotEmpty() && password.isNotEmpty()
                 ) {
-                    Text(stringResource(id=R.string.sign_up))
+                    Text(stringResource(id = R.string.sign_up))
                 }
             }
 
             TextButton(onClick = { navController.navigate("register") }) {
-                Text(stringResource(id=R.string.Create_account), color = Color.White)
+                Text(stringResource(id = R.string.Create_account), color = Color.White)
             }
         }
     }

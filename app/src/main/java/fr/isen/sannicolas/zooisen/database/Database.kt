@@ -9,9 +9,10 @@ data class Animal(
 )
 
 data class Enclosure(
-    val id_biomes: String = "",
     val id: String = "",
-    var animals: List<Animal> = emptyList()
+    val animals: List<Animal> = emptyList(),
+    val ratings: Map<String, Int>? = null,
+    val isOpen: Boolean = true
 )
 
 data class Biome(
@@ -31,7 +32,6 @@ data class Rating(
     val rating: Int = 0
 )
 
-
 object Database {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val biomesRef: DatabaseReference = database.getReference("biomes")
@@ -49,24 +49,39 @@ object Database {
                     val enclosuresSnapshot = biomeSnapshot.child("enclosures")
 
                     for (enclosureSnapshot in enclosuresSnapshot.children) {
-                        val id = enclosureSnapshot.key ?: ""
-                        val id_biomes = enclosureSnapshot.child("id_biomes").getValue(String::class.java) ?: ""
+                        val enclosureId = enclosureSnapshot.key.orEmpty()
 
-                        val animalsList = mutableListOf<Animal>()
-                        val animalsSnapshot = enclosureSnapshot.child("animals")
-
-                        for (animalSnapshot in animalsSnapshot.children) {
+                        // Récupérer les animaux
+                        val animalsList = enclosureSnapshot.child("animals").children.map { animalSnapshot ->
                             val id_animal = animalSnapshot.child("id_animal").getValue(String::class.java) ?: ""
                             val name = animalSnapshot.child("name").getValue(String::class.java) ?: ""
                             val id_enclos = animalSnapshot.child("id_enclos").getValue(String::class.java) ?: ""
-
-                            animalsList.add(Animal(id_animal, name, id_enclos))
+                            Animal(id_animal, name, id_enclos)
                         }
 
-                        enclosuresList.add(Enclosure(id_biomes, id, animalsList))
+                        // Récupérer les évaluations
+                        val ratingsType = object : GenericTypeIndicator<Map<String, Int>>() {}
+                        val ratings = enclosureSnapshot.child("ratings").getValue(ratingsType) ?: emptyMap()
+
+                        // Statut de l'enclos
+                        val isOpen = enclosureSnapshot.child("isOpen").getValue(Boolean::class.java) ?: true
+
+                        val enclosure = Enclosure(
+                            id = enclosureId,
+                            animals = animalsList,
+                            ratings = ratings,
+                            isOpen = isOpen
+                        )
+
+                        enclosuresList.add(enclosure)
                     }
 
-                    biomeList.add(Biome(color, name, enclosuresList))
+                    val biome = Biome(
+                        color = color,
+                        name = name,
+                        enclosures = enclosuresList
+                    )
+                    biomeList.add(biome)
                 }
 
                 onSuccess(biomeList)
@@ -124,8 +139,15 @@ object Database {
             .addOnFailureListener { onFailure(it) }
     }
 
-    fun addRating(biomeId: String, enclosureId: String, userId: String, rating: Int, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val ratingsRef = FirebaseDatabase.getInstance().getReference("biomes")
+    fun addRating(
+        biomeId: String,
+        enclosureId: String,
+        userId: String,
+        rating: Int,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val ratingsRef = biomesRef
             .child(biomeId)
             .child("enclosures")
             .child(enclosureId)
@@ -141,7 +163,7 @@ object Database {
     }
 
     fun updateAverageRating(biomeId: String, enclosureId: String) {
-        val ratingsRef = FirebaseDatabase.getInstance().getReference("biomes")
+        val ratingsRef = biomesRef
             .child(biomeId)
             .child("enclosures")
             .child(enclosureId)
@@ -151,7 +173,7 @@ object Database {
             val ratings = snapshot.children.mapNotNull { it.getValue(Int::class.java) }
             val averageRating = if (ratings.isNotEmpty()) ratings.average() else 0.0
 
-            FirebaseDatabase.getInstance().getReference("biomes")
+            biomesRef
                 .child(biomeId)
                 .child("enclosures")
                 .child(enclosureId)
@@ -160,4 +182,37 @@ object Database {
         }
     }
 
+    fun initializeEnclosureOpenStatus() {
+        val database = FirebaseDatabase.getInstance().reference.child("biomes")
+        database.get().addOnSuccessListener { snapshot ->
+            snapshot.children.forEach { biomeSnapshot ->
+                val biomeName = biomeSnapshot.key.orEmpty()
+                biomeSnapshot.child("enclosures").children.forEach { enclosureSnapshot ->
+                    val enclosureRef = database.child(biomeName).child("enclosures").child(enclosureSnapshot.key.orEmpty())
+                    enclosureRef.child("isOpen").setValue(true)
+                }
+            }
+            println("✅ Mise à jour des enclos terminée !")
+        }.addOnFailureListener {
+            println("❌ Erreur lors de la mise à jour : ${it.message}")
+        }
+    }
+
+    fun updateEnclosureStatus(
+        biomeName: String,
+        enclosureId: String,
+        isOpen: Boolean,
+        onSuccess: () -> Unit = {},
+        onFailure: (Exception) -> Unit = {}
+    ) {
+        val enclosureRef = biomesRef
+            .child(biomeName)
+            .child("enclosures")
+            .child(enclosureId)
+            .child("isOpen")
+
+        enclosureRef.setValue(isOpen)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { exception -> onFailure(exception) }
+    }
 }

@@ -1,6 +1,7 @@
 package fr.isen.sannicolas.zooisen.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,26 +11,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.firebase.database.FirebaseDatabase
+import fr.isen.sannicolas.zooisen.R
 import fr.isen.sannicolas.zooisen.database.Biome
 import fr.isen.sannicolas.zooisen.database.Database
 import fr.isen.sannicolas.zooisen.database.Enclosure
-import fr.isen.sannicolas.zooisen.R
-import androidx.compose.ui.res.painterResource
-import androidx.compose.foundation.clickable
-import com.google.firebase.database.FirebaseDatabase
-
 
 @Composable
 fun EnclosureScreen(navController: NavHostController, biomeId: String) {
+    val context = LocalContext.current
     var selectedBiome by remember { mutableStateOf<Biome?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         Database.fetchBiomes(
-            onSuccess = { biomes -> selectedBiome = biomes.find { it.name == biomeId } },
+            onSuccess = { biomes ->
+                selectedBiome = biomes.find { it.name == biomeId }
+            },
             onFailure = { errorMessage = it.message }
         )
     }
@@ -47,6 +50,7 @@ fun EnclosureScreen(navController: NavHostController, biomeId: String) {
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             if (errorMessage != null) {
@@ -74,7 +78,7 @@ fun EnclosureScreen(navController: NavHostController, biomeId: String) {
 
 @Composable
 fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostController) {
-    val userId = "User123" // TODO: Récupérer l'ID réel de l'utilisateur connecté
+    val userId = "User123" // TODO: Remplacer par l'ID réel de l'utilisateur connecté
     var rating by remember { mutableStateOf(0) }
 
     LaunchedEffect(enclosure.id) {
@@ -108,6 +112,7 @@ fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostC
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(text = "Animaux :", fontWeight = FontWeight.Bold)
@@ -117,14 +122,24 @@ fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostC
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Notez cet enclos :", fontWeight = FontWeight.Bold)
-            RatingBar(currentRating = rating) { selectedRating ->
-                rating = selectedRating
-                Database.addRating(
-                    biomeId, enclosure.id, userId, selectedRating,
-                    onSuccess = { println("✅ Note mise à jour") },
-                    onFailure = { println("❌ Échec de l'enregistrement") }
-                )
+            Text(text = "Statut de l'enclos :", fontWeight = FontWeight.Bold)
+            Text(
+                text = if (enclosure.isOpen) "Ouvert ✅" else "Fermé ❌",
+                color = if (enclosure.isOpen) Color.Green else Color.Red
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Bloquer le switch pour les non-admin
+            if (/* condition pour vérifier si l'utilisateur est admin */ false) {
+                RatingBar(currentRating = rating) { selectedRating ->
+                    rating = selectedRating
+                    Database.addRating(
+                        biomeId, enclosure.id, userId, selectedRating,
+                        onSuccess = { println("✅ Note mise à jour") },
+                        onFailure = { println("❌ Échec de l'enregistrement") }
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -138,8 +153,6 @@ fun EnclosureCard(enclosure: Enclosure, biomeId: String, navController: NavHostC
         }
     }
 }
-
-
 
 @Composable
 fun RatingBar(
